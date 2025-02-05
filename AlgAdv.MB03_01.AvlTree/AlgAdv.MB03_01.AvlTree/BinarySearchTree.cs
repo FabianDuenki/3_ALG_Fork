@@ -1,4 +1,6 @@
-﻿namespace AlgAdv.MB03_01.AVLTree {
+﻿using System.Security.AccessControl;
+
+namespace AlgAdv.MB03_01.AVLTree {
     public enum TraverseModeEnum {
         PreOrder,
         PostOrder,
@@ -15,6 +17,70 @@
 
             public Node Left { get; set; } = null!;
             public Node Right { get; set; } = null!;
+
+            public int BalanceFactor()
+            {
+                if (this == null) return 0;
+                int factorLeft = Left != null ? Left.BalanceFactor() : 0;
+                int factorRight = Right != null ? Right.BalanceFactor() : 0;
+
+                return 1 + (Math.Max(factorLeft, factorRight));
+            }
+            public bool HasChild()
+            {
+                return this.Left != null || this.Right != null;
+            }
+            public void Balance()
+            {
+                int balanceShift = Right.BalanceFactor() - Left.BalanceFactor();
+                // is right shifted?
+                if (balanceShift > 1)
+                {
+                    balanceShift = Right.Right.BalanceFactor() - Right.Left.BalanceFactor();
+                    // is double right shifted?
+                    if (balanceShift > 0)
+                    {
+                        LeftLeftRotation();
+                    }
+                    // is right left shifted?
+                    else if (balanceShift < 0)
+                    {
+                        RightLeftRotation();
+                    }
+                }
+                // is LeftShifted?
+                else if (balanceShift < -1)
+                {
+                    balanceShift = Left.Right.BalanceFactor() - Left.Left.BalanceFactor();
+                    // is left right shifted?
+                    if (balanceShift > 0)
+                    {
+                        LeftRightRotation();
+                    }
+                    // is double left shiftd?
+                    else if (balanceShift < 0)
+                    {
+                        RightRightRotation();
+                    }
+
+                }
+            }
+            private void LeftLeftRotation()
+            {
+
+            }
+            private void RightLeftRotation()
+            {
+
+            }
+            private void LeftRightRotation()
+            {
+
+            }
+            private void RightRightRotation()
+            {
+
+            }
         }
 
         private Node root = null!;
@@ -51,25 +117,34 @@
         // Recursive add algorithm
         private void AddTo(Node node, T item) {
             // Case 1: item is less than the current node value
-            if (item.CompareTo(node.Item) < 0) {
+            if (item.CompareTo(node.Item) < 0)
+            {
                 // if there is no left child make this the new left
-                if (node.Left == null) {
+                if (node.Left == null)
+                {
                     node.Left = new Node() { Item = item };
-                } else {
+                }
+                else
+                {
                     // else add it to the left node
                     AddTo(node.Left, item);
                 }
             }
             // Case 2: item is equal to or greater than the current value
-            else {
+            else
+            {
                 // If there is no right, add it to the right
-                if (node.Right == null) {
+                if (node.Right == null)
+                {
                     node.Right = new Node() { Item = item };
-                } else {
+                }
+                else
+                {
                     // else add it to the right node
                     AddTo(node.Right, item);
                 }
             }
+            node.Balance();
         }
 
         /// <summary>
