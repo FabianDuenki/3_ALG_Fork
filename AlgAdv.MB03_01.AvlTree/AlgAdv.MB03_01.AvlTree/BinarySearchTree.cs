@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using System.ComponentModel.Design.Serialization;
+using System.Security.AccessControl;
 
 namespace AlgAdv.MB03_01.AVLTree {
     public enum TraverseModeEnum {
@@ -30,7 +31,7 @@ namespace AlgAdv.MB03_01.AVLTree {
             {
                 return this.Left != null || this.Right != null;
             }
-            public void Balance()
+            public Node Balance()
             {
                 int balanceShift = Right.BalanceFactor() - Left.BalanceFactor();
                 // is right shifted?
@@ -40,12 +41,12 @@ namespace AlgAdv.MB03_01.AVLTree {
                     // is double right shifted?
                     if (balanceShift > 0)
                     {
-                        LeftLeftRotation();
+                        return LeftLeftRotation();
                     }
                     // is right left shifted?
                     else if (balanceShift < 0)
                     {
-                        RightLeftRotation();
+                        return RightLeftRotation();
                     }
                 }
                 // is LeftShifted?
@@ -55,31 +56,41 @@ namespace AlgAdv.MB03_01.AVLTree {
                     // is left right shifted?
                     if (balanceShift > 0)
                     {
-                        LeftRightRotation();
+                        return LeftRightRotation();
                     }
                     // is double left shiftd?
                     else if (balanceShift < 0)
                     {
-                        RightRightRotation();
+                        return RightRightRotation();
                     }
 
                 }
             }
-            private void LeftLeftRotation()
+            private Node LeftLeftRotation()
             {
+                var root = this.Right;
+                this.Right = root.Left;
+                root.Left = this;
 
+                return root;
             }
-            private void RightLeftRotation()
+            private Node RightLeftRotation()
             {
-
+                this.Right = this.Right.RightRightRotation();
+                return this.LeftLeftRotation();
             }
-            private void LeftRightRotation()
+            private Node LeftRightRotation()
             {
-
+                this.Left  = this.Left.LeftLeftRotation();
+                return this.RightRightRotation();
             }
-            private void RightRightRotation()
+            private Node RightRightRotation()
             {
+                var root = this.Left;
+                this.Left = root.Right;
+                root.Right = this;
 
+                return root;
             }
         }
 
@@ -144,7 +155,7 @@ namespace AlgAdv.MB03_01.AVLTree {
                     AddTo(node.Right, item);
                 }
             }
-            node.Balance();
+            node = node.Balance();
         }
 
         /// <summary>
