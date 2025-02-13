@@ -8,8 +8,10 @@
 
             //tree.AddRange(new int[] { 5, 3, 8, 2, 4, 7, 9 });
             //tree.AddRange(new int[] { 4, 2, 1, 3, 6, 5, 7 });
-            //tree.AddRange(new int[] { 1, 2, 3, 4, 5, 6, 7 });
-            tree.AddRange(new int[] { 110, 130, 135, 140, 150, 160 });
+            tree.AddRange(new int[] { 1, 2, 3, 4, 5, 6, 7 });
+            Console.WriteLine(tree);
+            Console.ReadLine();
+            //tree.AddRange(new int[] { 110, 130, 135, 140, 150, 160 });
 
             Console.WriteLine(tree.Contains(10));
             //Console.WriteLine(tree.Contains(11));

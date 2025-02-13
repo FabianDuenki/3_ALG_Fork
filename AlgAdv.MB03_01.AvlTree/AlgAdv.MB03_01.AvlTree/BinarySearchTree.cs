@@ -27,17 +27,24 @@ namespace AlgAdv.MB03_01.AVLTree {
 
                 return 1 + (Math.Max(factorLeft, factorRight));
             }
+            public int BalanceShift(Node node)
+            {
+                int factorRight = Right != null ? Right.BalanceFactor() : 0;
+                int factorLeft = Left != null ? Left.BalanceFactor() : 0;
+                return factorRight - factorLeft;
+            }
             public bool HasChild()
             {
                 return this.Left != null || this.Right != null;
             }
             public Node Balance()
             {
-                int balanceShift = Right.BalanceFactor() - Left.BalanceFactor();
+                //if (Left == null || Right == null) return this;
+                int balanceShift = BalanceShift(this);
                 // is right shifted?
                 if (balanceShift > 1)
                 {
-                    balanceShift = Right.Right.BalanceFactor() - Right.Left.BalanceFactor();
+                    balanceShift = BalanceShift(this.Right);
                     // is double right shifted?
                     if (balanceShift > 0)
                     {
@@ -52,7 +59,8 @@ namespace AlgAdv.MB03_01.AVLTree {
                 // is LeftShifted?
                 else if (balanceShift < -1)
                 {
-                    balanceShift = Left.Right.BalanceFactor() - Left.Left.BalanceFactor();
+                    //balanceShift = Left.Right.BalanceFactor() - Left.Left.BalanceFactor();
+                    balanceShift = BalanceShift(this.Left);
                     // is left right shifted?
                     if (balanceShift > 0)
                     {
@@ -63,8 +71,8 @@ namespace AlgAdv.MB03_01.AVLTree {
                     {
                         return RightRightRotation();
                     }
-
                 }
+                return this;
             }
             private Node LeftLeftRotation()
             {
@@ -325,6 +333,7 @@ namespace AlgAdv.MB03_01.AVLTree {
                     }
                 }
             }
+
 
             return true;
         }
